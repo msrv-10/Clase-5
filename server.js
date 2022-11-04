@@ -44,12 +44,20 @@ if (zonaHoraria >=  |  zonaHoraria <= 12 ) {
 }else{
     console.log('Buenas noches');
 } */
+
+// ENVIAR EN TEXTO
+/* app.get('/', (req, res) => {
+  res.send('Hello World!')
+}) */
 const express = require('express')
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.JSON ([{ id: 102, product: 'pelota', category: 'deportes', price: 100},
+             { id: 103, product: 'guantes', category: 'deportes', price: 100},
+             { id: 104, product: '', category: 'pelotas', price: 100}
+]);
 })
 app.get('/persona/matias', (req, res) => {
   res.json([{nombre:'matias', edad: 27, email:'matiassreus@gmail.com'}])
