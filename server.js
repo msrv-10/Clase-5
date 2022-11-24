@@ -1,8 +1,17 @@
 const express = require("express");
+const { Router } = express;
 const app = express();
+const routerProducts = Router();
 const port = process.env.PORT || 8080;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.listen(port, () => {
+  console.log(`Example app listening on port http://localhost:${port}`);
+});
+
+app.use('/api/products', routerProducts);
 
 let products = [
   { id: 102, product: "pelota", category: "deportes", price: 100 },
@@ -10,15 +19,15 @@ let products = [
   { id: 104, product: "pelota de tenis", category: "pelotas", price: 100 },
 ];
 
-app.get("/api/products", (req, res) => {
+routerProducts.get("/", (req, res) => {
   res.json(products);
 });
-app.post("/api/products", (req, res) => {
+routerProducts.post("/", (req, res) => {
   const { body } = req;
   products.push(body);
   res.json("ok");
 });
-app.get("/api/products/:id", (req, res) => {
+routerProducts.get("/:id", (req, res) => {
   const { id } = req.params;
   const productFind = products.find((product) => product.id == id);
   if (productFind) {
@@ -27,7 +36,7 @@ app.get("/api/products/:id", (req, res) => {
     res.json({ error: true, msg: "Producto no encontrado" });
   }
 });
-app.put("/api/products/:id", (req, res) => {
+routerProducts.put("/:id", (req, res) => {
   const { id } = req.params;
   const { body } = req;
   const positionOfProduct = products.findIndex((product) => product.id == id);
@@ -39,12 +48,10 @@ app.put("/api/products/:id", (req, res) => {
   }
 });
 
-app.delete('/api/products/:id', (req, res) => {
+routerProducts.delete('/:id', (req, res) => {
   const { id } = req.params;
   products = products.filter((product) => product.id != id);
   res.json = ({success: true, productos: products.length});
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port http://localhost:${port}`);
-});
+
