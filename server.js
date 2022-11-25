@@ -16,11 +16,6 @@ app.listen(port, () => {
 
 app.use("/api/products", routerProducts);
 
-app.use("/", (req, res, next) => {
-  console.log('meto un middleware a todo lo que entra');
-  next();
-});
-
 let products = [
   { id: 102, product: "pelota", category: "deportes", price: 100 },
   { id: 103, product: "guantes", category: "deportes", price: 100 },
@@ -31,9 +26,21 @@ app.get("/", (req, res) => {
   res.send("<h1> WELCOME </h1>");
 });
 
-routerProducts.get("/", (req, res) => {
-  res.json(products);
-});
+routerProducts.use((req, res, next) => {
+  console.log('meto un middleware a lo que entre en la ruta api products');
+  next();
+})
+
+routerProducts.get(
+  "/",
+  (req, res, next) => {
+    console.log("entrego productos");
+    next();
+  },
+  (req, res) => {
+    res.json(products);
+  }
+);
 routerProducts.post("/", (req, res) => {
   const { body } = req;
   products.push(body);
